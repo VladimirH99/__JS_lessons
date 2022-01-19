@@ -3,13 +3,15 @@
 /* eslint-disable require-jsdoc */
 
 function createCarousel(slidesCount = 5) {
-    // let container = null;
+    let container = null;
+    let prevIndicator = null;
 
     function createContainer() {
         elem = document.createElement('div');
+        elem.setAttribute('id', 'carousel');
         elem.setAttribute('class', 'carousel');
         document.querySelector('body').appendChild(elem);
-        container = document.querySelector('.carousel');
+        container = document.querySelector('#carousel');
     };
 
     function createSlides(n) {
@@ -43,61 +45,88 @@ function createCarousel(slidesCount = 5) {
     function createControls() {
         controlsContainer = document.createElement('div');
         controlsContainer.setAttribute('class', 'controls');
+
         for (i = 0; i < 3; i++) {
-            controlsItem = document.createElement('div');
-            controlsIcon = document.createElement('i');
+            let controlItem = document.createElement('div');
+            let controlIcon = document.createElement('i');
             const defItemClass = 'controls__item';
             const defIconClass = 'fas';
 
             switch (i) {
                 case 0:
-                    controlsItem.setAttribute('class', `${defItemClass} controls__prev`);
-                    controlsIcon.setAttribute('clas', `${defIconClass} fa-chevron-left`);
+                    controlItem.setAttribute('class', `${defItemClass} controls__prev`);
+                    controlIcon.setAttribute('class', `${defIconClass} fa-chevron-left`);
                     break;
                 case 1:
-                    controlsItem.setAttribute('class', `${defItemClass} controls__pause`);
-                    controlsIcon.setAttribute('clas', `${defIconClass} fas fa-play`);
+                    controlItem.setAttribute('class', `${defItemClass} controls__next`);
+                    controlIcon.setAttribute('class', `${defIconClass} fa-chevron-right`);
                     break;
                 case 2:
-                    controlsItem.setAttribute('class', `${defItemClass} controls__next`);
-                    controlsIcon.setAttribute('clas', `${defIconClass} fa-chevron-right`);
+                    controlItem.setAttribute('class', `${defItemClass} controls__pause`);
+                    controlIcon.setAttribute('class', `${defIconClass} fa-play`);
                     break;
-            };
-            controlsItem.appendChild(controlsIcon);
-            controlsContainer.appendChild(controlsItem);
-        };
+            }
+            controlItem.appendChild(controlIcon);
+            controlsContainer.appendChild(controlItem);
+        }
         container.appendChild(controlsContainer);
     }
 
     function createStyle() {
         styleContainer = document.createElement('style');
         let styleCode = `
-        ul {
-            list-style: none;
-        }
-        .controls, .slides {
+          .controls,
+          .slides {
             position: relative;
-            height: 100px;
-        }
-        indicators {
             display: flex;
-        }
-        .indicators__item {
+            justify-content: center;
+          }
+          .controls__item {
+            margin: 20px;
+          }
+          .indicators {
+            display: flex;
+            justify-content: center;
+          }
+          ul {
+            list-style-type: none;
+            height: 100px;
+            background-color: blue;
+          }
+          .indicators__item {
             display: block;
-            width: 30px;
-            height: 30px;
-            background-color: black;
-            margin: 10px;
-            border-radius: 10px;
-        }`;
+            width: 20px;
+            height: 20px;
+            background-color: gray;
+            margin: 5px;
+            border-radius: 5px;
+          }`;
+
         styleContainer.innerHTML = styleCode;
         container.appendChild(styleContainer);
-    };
-    createContainer();
-    createSlides(5);
-    createIndicators(5)
-    createControls()
+    }
 
+    function indicatorsHandler(e) {
+        let target = e.target;
+
+        if (target.classList.contains('indicators__item')) {
+            target.style.backgroundColor = 'red';
+            if (prevIndicator !== null) prevIndicator.removeAttribute('style');
+            prevIndicator = target;
+        }
+    }
+
+    function setListener() {
+        let indContainer = document.querySelector('div.indicators');
+        indContainer.addEventListener('click', indicatorsHandler);
+    }
+
+    container = document.querySelector('#carousel');
+    // createContainer();
+    createSlides(slidesCount);
+    createIndicators(slidesCount);
+    createControls();
+    createStyle();
+    setListener();
 }
-
-createCarousel(4);
+createCarousel();
