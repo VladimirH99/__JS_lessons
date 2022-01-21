@@ -1,132 +1,152 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable multiline-comment-style */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-useless-escape */
+/* eslint-disable require-unicode-regexp */
 /* eslint-disable func-style */
 /* eslint-disable require-jsdoc */
+console.log('Sample JavaScript #7 HW #21');
 
-function createCarousel(slidesCount = 5) {
-    let container = null;
-    let prevIndicator = null;
-
-    function createContainer() {
-        elem = document.createElement('div');
-        elem.setAttribute('id', 'carousel');
-        elem.setAttribute('class', 'carousel');
-        document.querySelector('body').appendChild(elem);
-        container = document.querySelector('#carousel');
-    };
-
-    function createSlides(n) {
-        slidesContainer = document.createElement('ul');
-        slidesContainer.setAttribute('class', 'slides');
-
-        for (i = 0; i < n; i++) {
-            let slideItem = document.createElement('li');
-            let slideLink = document.createElement('a');
-            slideItem.setAttribute('class', i === 0 ? 'slides__item active' : 'slides__item');
-            slideLink.setAttribute('href', '#');
-            slideItem.appendChild(slideLink);
-            slidesContainer.appendChild(slideItem);
-        }
-        container.appendChild(slidesContainer);
-    };
-
-    function createIndicators(n) {
-        indContainer = document.createElement('div');
-        indContainer.setAttribute('class', 'indicators');
-
-        for (i = 0; i < n; i++) {
-            let indItems = document.createElement('span');
-            indItems.setAttribute('class', i === 0 ? 'indicators__item active' : 'indicators__item');
-            indItems.setAttribute('data-slide-to', i);
-            indContainer.appendChild(indItems);
-        }
-        container.appendChild(indContainer);
-    };
-
-    function createControls() {
-        controlsContainer = document.createElement('div');
-        controlsContainer.setAttribute('class', 'controls');
-
-        for (i = 0; i < 3; i++) {
-            let controlItem = document.createElement('div');
-            let controlIcon = document.createElement('i');
-            const defItemClass = 'controls__item';
-            const defIconClass = 'fas';
-
-            switch (i) {
-                case 0:
-                    controlItem.setAttribute('class', `${defItemClass} controls__prev`);
-                    controlIcon.setAttribute('class', `${defIconClass} fa-chevron-left`);
-                    break;
-                case 1:
-                    controlItem.setAttribute('class', `${defItemClass} controls__next`);
-                    controlIcon.setAttribute('class', `${defIconClass} fa-chevron-right`);
-                    break;
-                case 2:
-                    controlItem.setAttribute('class', `${defItemClass} controls__pause`);
-                    controlIcon.setAttribute('class', `${defIconClass} fa-play`);
-                    break;
-            }
-            controlItem.appendChild(controlIcon);
-            controlsContainer.appendChild(controlItem);
-        }
-        container.appendChild(controlsContainer);
-    }
-
-    function createStyle() {
-        styleContainer = document.createElement('style');
-        let styleCode = `
-          .controls,
-          .slides {
-            position: relative;
-            display: flex;
-            justify-content: center;
-          }
-          .controls__item {
-            margin: 20px;
-          }
-          .indicators {
-            display: flex;
-            justify-content: center;
-          }
-          ul {
-            list-style-type: none;
-            height: 100px;
-            background-color: blue;
-          }
-          .indicators__item {
-            display: block;
-            width: 20px;
-            height: 20px;
-            background-color: gray;
-            margin: 5px;
-            border-radius: 5px;
-          }`;
-
-        styleContainer.innerHTML = styleCode;
-        container.appendChild(styleContainer);
-    }
-
-    function indicatorsHandler(e) {
-        let target = e.target;
-
-        if (target.classList.contains('indicators__item')) {
-            target.style.backgroundColor = 'red';
-            if (prevIndicator !== null) prevIndicator.removeAttribute('style');
-            prevIndicator = target;
-        }
-    }
-
-    function setListener() {
-        let indContainer = document.querySelector('div.indicators');
-        indContainer.addEventListener('click', indicatorsHandler);
-    }
-
-    container = document.querySelector('#carousel');
-    // createContainer();
-    createSlides(slidesCount);
-    createIndicators(slidesCount);
-    createControls();
-    createStyle();
-    setListener();
+/*
+ * #1
+ *
+ * replaceCSSComments() {...}
+ * Найдите и удалите все комментарии CSS.
+ * Функция получает строку, возвращает преобразованную строку, конечные пробелы должны быть удалены.
+ */
+function replaceCSSComments(str) {
+    return str.replace(/\/\*.*?\*\/\s?/g, '');
 }
-createCarousel();
+
+console.log(replaceCSSComments('код без /*комментарий*/ комментов')); // код без комментов
+console.log(replaceCSSComments('код бе/*коммент1*/з ком/* коммент2 */ментов')); // код без комментов
+console.log(replaceCSSComments('код /*к1*/ без /* к2 */ коммент/*к3*/ов')); // код без комментов
+
+/*
+ * #2
+ *
+ * replaceHTMLComments() {...}
+ * Найдите и удалите все комментарии HTML.
+ * Функция получает строку, возвращает преобразованную строку.
+ */
+function replaceHTMLComments(str) {
+    return str.replace(/\<\!\-\-*.*?\-\-\>\s*/g, '').trim();
+}
+
+console.log(replaceHTMLComments('<!--коммент1--> код без комментов <!--коммент2-->')); // код без комментов
+console.log(replaceHTMLComments('<!--к1--> код <!-- к2 --><!-- к3 --> без <!-- к4 --> комментов')); // код без комментов
+console.log(replaceHTMLComments('код <!--к1--> без <!-- к2 --> комментов')); // код без комментов
+
+/*
+ * #3
+ *
+ * validateFileType() {...}
+ * С помощью test определите, что переданная строка заканчивается расширениями: jpg, jpeg, png.
+ * Функция получает строку – имя файла, возвращает true или false.
+ */
+function validateFileType(str) {
+    return (/.+(\.jpg|\.jpeg|\.png)$/g).test(str)
+};
+
+console.log(validateFileType('image.png')); // true
+console.log(validateFileType('image.html')); // false
+console.log(validateFileType('image.file.jpg')); // true
+console.log(validateFileType('image.png.file')); // false
+console.log(validateFileType('image.png.jpeg')); // true
+console.log(validateFileType('image.pngjpeg')); // false
+
+/*
+ * #4
+ *
+ * checkYear() {...}
+ * Определите, что год находится в интервале от 1900 до 2100 с помощью одного только (единственного) регулярного выражения.
+ * Функция получает строку – год, возвращает true или false.
+ */
+console.log('задание 4');
+function checkYear(str) {
+    return (/^19\d\d$|20\d\d$|2100$/g).test(str)
+};
+
+console.log(checkYear(1900)); // true
+console.log(checkYear(2001)); // true
+console.log(checkYear(2100)); // true
+console.log(checkYear(1899)); // false
+console.log(checkYear(20)); // false
+console.log(checkYear(200)); // false
+console.log(checkYear(20000)); // false
+console.log(checkYear('20000')); // false
+console.log(checkYear(19)); // false
+console.log(checkYear('19')); // false
+console.log(checkYear(2101)); // false
+
+/*
+ * #5
+ *
+ * checkEmail() {...}
+ * С помощью метода test определите, что переданная строка является имейлом. Примеры имейлов для тестирования: mymail@mail.ru, my.mail@mail.ua, my-mail@yahoo.com, mail@gmail.com
+ * Функция получает строку – имейл, возвращает true или false.
+ */
+console.log('задание 5');
+function checkEmail(str) {
+    return (/^[a-z]+\W?[a-z]+@[a-z\.]+\.[a-z]{2,3}$/).test(str)
+};
+
+console.log(checkEmail('mail@gmail.com')); // true
+console.log(checkEmail('mail.name@mail.ua')); // true
+console.log(checkEmail('mail-name@mail.ua')); // true
+console.log(checkEmail('mail-name@mail.com.ua')); // true
+console.log(checkEmail('mail@gmail')); // false
+console.log(checkEmail('mail@gmail-com')); // false
+console.log(checkEmail(' mail-name@mail.com.ua')); // false
+console.log(checkEmail('mail-name@mail.com.ua ')); // false
+
+/*
+ * #6
+ *
+ * checkDomainUrl() {...}
+ * С помощью test определите, что переданная строка является доменом.
+ *     Протокол может быть как http, так и https.
+ *     Примеры доменов:
+ *     http://site.ua, https://my-site.com, https://site.com.ua, https://subdomain.site.com.ua
+ *         Функция получает строку – доменное имя, возвращает true или false.
+ */
+console.log('Задание 6');
+function checkDomainUrl(str) {
+    return (/^(http:|https:)\/\/(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,5}?$/).test(str)
+}
+
+console.log(checkDomainUrl('http://external.asd1230-123.asd_internal.asd.gm-_ail.com')); // true
+console.log(checkDomainUrl('http://domain.com')); // true
+console.log(checkDomainUrl('https://example.domain.com')); // true
+console.log(checkDomainUrl('https://example.domain-hyphen.com')); // true
+console.log(checkDomainUrl('http://example.domain-hyphen.com')); // true
+console.log(checkDomainUrl('http://www.domain.com')); // true
+console.log(checkDomainUrl('http://www.domain.info')); // true
+console.log(checkDomainUrl('http://www')); // false
+console.log(checkDomainUrl('https://domain')); // false
+console.log(checkDomainUrl(' https://domain')); // false
+console.log(checkDomainUrl('https://domain.com ')); // false
+console.log(checkDomainUrl('example.museum')); // false
+console.log(checkDomainUrl('example.domain-hyphen.com')); // false
+console.log(checkDomainUrl('www.domain.com')); // false
+console.log(checkDomainUrl('www.example.domain-hyphen.com')); // false
+
+/*
+ * #7
+ *
+ * createLinksFromDomains() {...}
+ * С помощью replace замените в строке домены вида http://site.ua, https://site.com на <a href="http://site.ua" target="_blank">site.ua</a>.
+ * Протокол может быть как http, так и https.
+ * Функция получает произвольную строку текста с доменами (один и более), возвращает результат преобразования.
+ * В данном задании требуется использовать метод match().
+ */
+function createLinksFromDomains(str) {
+    let reg = new RegExp('(http:|https:)\\/\\/(?!:\\/\\/)([a-zA-Z0-9-_]+\\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\\.[a-zA-Z]{2,5}', 'g');
+
+    str.match(reg).forEach((item) => str = str.replace(item, `<a href="${item}" target="_blank">${item.replace(/^(http:|https:)\/\//gi, '')}</a>`));
+
+    return str;
+}
+// <a href="http://site.ua">site.ua</a> text1 <a href="https://site.com">site.com</a> text2 <a href="https://site.com.ua">site.com.ua</a> text3 <a href="https://subdomain.my-site.com.ua">subdomain.my-site.com.ua</a> text4
+console.log(createLinksFromDomains('http://site.ua text1 https://site.com text2 https://site.com.ua text3 https://subdomain.my-site.com.ua text4'));
+// site.ua text1 <a href="https://site.com">site.com</a> text2 <a href="https://site.com.ua">site.com.ua</a> text3 subdomain.my-site.com.ua text4
+console.log(createLinksFromDomains('site.ua text1 https://site.com text2 https://site.com.ua text3 subdomain.my-site.com.ua text4'));
